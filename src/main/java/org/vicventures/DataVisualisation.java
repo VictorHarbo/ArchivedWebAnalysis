@@ -24,6 +24,7 @@ import java.util.Map;
 public class DataVisualisation extends Application {
 
     @Override public void start(Stage stage) throws IOException {
+        /*
         stage.setTitle("Fordeling af arkiverede websites");
         //defining the axes
         final CategoryAxis xAxis = new CategoryAxis();
@@ -69,6 +70,8 @@ public class DataVisualisation extends Application {
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
         System.out.println("Image Saved");
 
+         */
+
 
 
         // Showing the scene on screen
@@ -77,6 +80,7 @@ public class DataVisualisation extends Application {
         // ********* END OF LINECHART **********
         // ********* START OF PIECHART ********
 
+        /*
         Scene scene2 = new Scene(new Group());
         stage.setTitle("Imported Fruits");
         stage.setWidth(800);
@@ -102,12 +106,55 @@ public class DataVisualisation extends Application {
         ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
         System.out.println("Image Saved");
 
+         */
+
+
+
+        // Third visualisation
+
+        final CategoryAxis xAxis2 = new CategoryAxis();
+        final NumberAxis yAxis2 = new NumberAxis();
+
+        xAxis2.setLabel("År");
+
+        //creating the chart
+        final LineChart<String,Number> lineChart2 =
+                new LineChart<String,Number>(xAxis2,yAxis2);
+
+        lineChart2.setTitle("Figur 3: Fed Titel");
+
+        Map<String, Map<String, Integer>> values = DataLoader.getAllFiletypesPerYear();
+        // go through the parties and add them to the chart
+        values.keySet().stream().forEach(filetype -> {
+            // a different data set for every party
+            XYChart.Series data = new XYChart.Series();
+            data.setName(filetype);
+
+            // add the party's support numbers to the data set
+            values.get(filetype).entrySet().stream().forEach(pair -> {
+                data.getData().add(new XYChart.Data(pair.getKey(), pair.getValue()));
+            });
+
+            // and add the data set to the chart
+            lineChart2.getData().add(data);
+        });
+
+        Scene scene3  = new Scene(lineChart2,800,600);
+        stage.setScene(scene3);
+        //Saving the third scene as image
+        WritableImage image3 = scene3.snapshot(null);
+        File file3 = new File("src/main/resources/output/testlinechart.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
+        System.out.println("Image Saved");
+
+
 
 
     }
-
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }
 

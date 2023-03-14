@@ -214,45 +214,7 @@ public class DataLoader {
         return countOfFormats;
     }
 
-    public static Map<String, Map<String, Integer>> getFiletypesSortedByYear(String startDirectory){
-        List<String> filePaths = getListOfAllFilesFromDirectory(startDirectory);
-        List<String> shortenedPaths = new ArrayList<>();
-        Map<String, Map<String, Integer>> filetypesFilteredByYear = new HashMap<>();
-        Pattern pattern = Pattern.compile("\\/(\\d{4})\\d{10}\\/");
 
-
-        // Create new list where the first part of the absolute path has been removed.
-        for (String s : filePaths){
-            // WARN: This only works with oddernettet directory as of now
-            shortenedPaths.add(s.replace("src/main/resources/data/oddernettet", ""));
-        }
-
-        // Creates keys for outer map. These keys contain all years from timestamps.
-        for (String s : shortenedPaths) {
-            Matcher matcher = pattern.matcher(s);
-            boolean matchFound = matcher.find();
-
-            if (!matchFound){
-                System.out.println(s);
-            } else if (!filetypesFilteredByYear.containsKey(matcher.group(1))) {
-                String year = matcher.group(1);
-                filetypesFilteredByYear.put(year, createInnerMaps(year, startDirectory));
-
-            }
-        }
-
-        // Testing
-        filetypesFilteredByYear.entrySet().forEach(System.out::println);
-        return null;
-    }
-
-    public static Map<String, Integer> createInnerMaps(String year, String site){
-        // Reimplement this function to only add from files with specific year in timestamp
-        List<String> fileStrings = DataLoader.getFiletypesFromSpecificYear(year, site);
-        List<String> cleanFormats = DataLoader.getCleanFileFormatFromPaths(fileStrings);
-        Map<String, Integer> countOfFormats = DataLoader.countFileTypes(cleanFormats);
-        return countOfFormats;
-    }
 
     private static List<String> getFiletypesFromSpecificYear(String year, String startDirectory){
         List<String> fileStrings = new ArrayList<>();
@@ -282,6 +244,82 @@ public class DataLoader {
     }
 
 
+    // TODO: The outermap should contain String = filetype and then innermap contains String year and number
+    public static Map<String, Map<String, Integer>> getAllFiletypesPerYear(){
+        // Create list containing all formats
+        List<String> fileStrings = getListOfAllFilesFromDirectory(oddernettetData);
+        List<String> allCleanFormats = getCleanFileFormatFromPaths(fileStrings);
+        List<String> allDistinctFormats = allCleanFormats.stream().distinct().toList();
+        List<String> allYears = getListOfAllYears(oddernettetData);
 
 
+
+
+        Map<String, Map<String, Integer>> filetypesPerYearCount = new HashMap<>();
+        for (int i = 0; i < allDistinctFormats.size(); i++) {
+            filetypesPerYearCount.put(allDistinctFormats.get(i), createInnerMaps(allYears, allDistinctFormats, i));
+
+        }
+
+        return filetypesPerYearCount;
     }
+
+    private static Map<String, Integer> createInnerMaps(List<String> allYears, List<String> allDistinctFormats, int i){
+        int[] countOfFormats2004 = new int[allDistinctFormats.size()];
+        int[] countOfFormats2003 = new int[allDistinctFormats.size()];
+
+
+        String year2004 = "2004";
+        List<String> filetypesFor2004 = getFiletypesFromSpecificYear(year2004, oddernettetData);
+        List<String> cleanFormats2004 = DataLoader.getCleanFileFormatFromPaths(filetypesFor2004);
+        List<String> distinctFormats2004 = cleanFormats2004.stream().distinct().toList();
+
+        String year2003 = "2003";
+        List<String> filetypesFor2003 = getFiletypesFromSpecificYear(year2003, oddernettetData);
+        List<String> cleanFormats2003 = DataLoader.getCleanFileFormatFromPaths(filetypesFor2003);
+        List<String> distinctFormats2003 = cleanFormats2003.stream().distinct().toList();
+
+
+        for (int j = 0; j < distinctFormats2004.size(); j++) {
+            for (String format : cleanFormats2004) {
+                if (format.equals(distinctFormats2004.get(j))) {
+                    countOfFormats2004[j]++;
+                }
+            }
+        }
+
+        for (int j = 0; j < distinctFormats2003.size(); j++) {
+            for (String format : cleanFormats2003) {
+                if (format.equals(distinctFormats2003.get(j))) {
+                    countOfFormats2003[j]++;
+                }
+            }
+        }
+
+        Map<String, Integer> innerMap = new TreeMap<>();
+        innerMap.put(year2004, countOfFormats2004[i]);
+        innerMap.put(year2003, countOfFormats2003[i]);
+
+        return innerMap;
+    }
+
+    public static List<String> getListOfAllYears(String website){
+        String[] datesFromDirectory = createDateArrayFromDirectoryNames(website);
+        List<String> filteredListOnlySnapshotDates = removeNonSnapshots(datesFromDirectory);
+        List<String> allYears = getDestinctStringYears(filteredListOnlySnapshotDates);
+        return allYears;
+    }
+
+    private static List<String> getDestinctStringYears(List<String> listOfSnapshots) {
+        String[] stringYears = new String[listOfSnapshots.size()];
+        for (int i = 0; i < listOfSnapshots.size(); i++) {
+            stringYears[i] = listOfSnapshots.get(i).substring(0, 4);
+        }
+        List<String> distinctYears = Arrays.stream(stringYears).distinct().toList();
+        return distinctYears;
+    }
+
+
+
+
+}

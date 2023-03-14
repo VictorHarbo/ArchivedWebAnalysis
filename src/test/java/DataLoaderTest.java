@@ -14,13 +14,15 @@ public class DataLoaderTest {
 
     @Test
     public void getListOfFileFormatsTest(){
-        Map<String, Integer> countOfFormats = DataLoader.getFileTypesFromSite(DataLoader.odderData);
+        Map<String, Integer> countOfFormats = DataLoader.getFileTypesFromSite(DataLoader.oddernettetData);
 
         countOfFormats.entrySet().stream().forEach(System.out::println);
     }
 
     @Test
     public void randomTest(){
-        DataLoader.getFiletypesSortedByYear(DataLoader.oddernettetData);
+        DataLoader.getAllFiletypesPerYear();
+
+        DataLoader.getListOfAllYears(DataLoader.oddernettetData);
     }
 }
