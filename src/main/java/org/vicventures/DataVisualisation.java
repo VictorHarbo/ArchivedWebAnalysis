@@ -24,7 +24,6 @@ import java.util.Map;
 public class DataVisualisation extends Application {
 
     @Override public void start(Stage stage) throws IOException {
-        /*
         stage.setTitle("Fordeling af arkiverede websites");
         //defining the axes
         final CategoryAxis xAxis = new CategoryAxis();
@@ -70,47 +69,10 @@ public class DataVisualisation extends Application {
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
         System.out.println("Image Saved");
 
-         */
-
-
-
         // Showing the scene on screen
         //stage.show();
 
-        // ********* END OF LINECHART **********
-        // ********* START OF PIECHART ********
-
-        /*
-        Scene scene2 = new Scene(new Group());
-        stage.setTitle("Imported Fruits");
-        stage.setWidth(800);
-        stage.setHeight(600);
-
-        Map<String, Integer> filetypesOnSite = DataLoader.getFileTypesFromSite(DataLoader.odderData);
-
-
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        for (Map.Entry<String, Integer> pair : filetypesOnSite.entrySet() ) {
-            pieChartData.add(new PieChart.Data(pair.getKey(), pair.getValue()));
-        }
-        final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Fordeling af filtyper på sitet");
-
-        ((Group) scene2.getRoot()).getChildren().add(chart);
-        stage.setScene(scene2);
-        //stage.show();
-
-        //Saving the second scene as image
-        WritableImage image2 = scene2.snapshot(null);
-        File file2 = new File("src/main/resources/output/piechart.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
-        System.out.println("Image Saved");
-
-         */
-
-
-
-        // Third visualisation
+        // Second visualisation
 
         final CategoryAxis xAxis2 = new CategoryAxis();
         final NumberAxis yAxis2 = new NumberAxis();
@@ -121,7 +83,7 @@ public class DataVisualisation extends Application {
         final LineChart<String,Number> lineChart2 =
                 new LineChart<String,Number>(xAxis2,yAxis2);
 
-        lineChart2.setTitle("Figur 3: Fed Titel");
+        lineChart2.setTitle("Figur 2: Fordeling af filtyper over tid på www.oddernettet.dk");
 
         Map<String, Map<String, Integer>> values = DataLoader.getAllFiletypesPerYear();
         // go through the parties and add them to the chart
@@ -139,17 +101,13 @@ public class DataVisualisation extends Application {
             lineChart2.getData().add(data);
         });
 
-        Scene scene3  = new Scene(lineChart2,800,600);
-        stage.setScene(scene3);
+        Scene scene2  = new Scene(lineChart2,800,600);
+        stage.setScene(scene2);
         //Saving the third scene as image
-        WritableImage image3 = scene3.snapshot(null);
-        File file3 = new File("src/main/resources/output/testlinechart.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
+        WritableImage image2 = scene2.snapshot(null);
+        File file2 = new File("src/main/resources/output/figure2.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
         System.out.println("Image Saved");
-
-
-
-
     }
     public static void main(String[] args) {
         launch(args);
