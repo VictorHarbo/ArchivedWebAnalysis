@@ -1,0 +1,106 @@
+package org.vicventures;
+
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.chart.*;
+import javafx.scene.control.Label;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Locale;
+import java.util.Map;
+
+
+public class DataVisualisation extends Application {
+
+    @Override public void start(Stage stage) throws IOException {
+        stage.setTitle("Fordeling af arkiverede websites");
+        //defining the axes
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+
+        xAxis.setLabel("År");
+
+        //creating the chart
+        final LineChart<String,Number> lineChart =
+                new LineChart<String,Number>(xAxis,yAxis);
+
+        lineChart.setTitle("Figur 1: Fordeling af arkiverede versioner per år (1998-2023)");
+
+        // Load odder.dk data
+        Map<String, Integer> odderSnapshotsPerYear = DataLoader.countNumberOfSnapshotsPerYear(DataLoader.odderData);
+        // define data series for odder.dk
+        XYChart.Series<String, Number> odderSeries = new XYChart.Series<>();
+        odderSeries.setName("odder.dk");
+        // Add data from odder.dk map to dataseries
+        for (Map.Entry<String, Integer> pair : odderSnapshotsPerYear.entrySet() ) {
+            odderSeries.getData().add(new XYChart.Data(pair.getKey(), pair.getValue()));
+        }
+
+        // Load oddernettet.dk data
+        Map<String, Integer> oddernettetSnapshotsPerYear = DataLoader.countNumberOfSnapshotsPerYear(DataLoader.oddernettetData);
+        // Define data series for oddernettet.dk
+        XYChart.Series oddernettetSeries = new XYChart.Series();
+        oddernettetSeries.setName("oddernettet.dk");
+        // Add data from oddernettet.dk map to dataseries
+        for (Map.Entry<String, Integer> pair : oddernettetSnapshotsPerYear.entrySet() ) {
+            oddernettetSeries.getData().add(new XYChart.Data(pair.getKey(), pair.getValue()));
+        }
+
+        // TODO: Make linegraph not show empty nodes from odder.dk
+        Scene scene  = new Scene(lineChart,800,600);
+        lineChart.getData().addAll(oddernettetSeries, odderSeries);
+
+        stage.setScene(scene);
+
+        //Saving the scene as image
+        WritableImage image = scene.snapshot(null);
+        File file = new File("src/main/resources/output/fordelingAfSnapshots.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
+        System.out.println("Image Saved");
+
+        // Showing the scene on screen
+        //stage.show();
+
+        // ********* END OF LINECHART **********
+        // ********* START OF PIECHART ********
+
+        /*
+        Scene scene2 = new Scene(new Group());
+        stage.setTitle("Imported Fruits");
+        stage.setWidth(800);
+        stage.setHeight(600);
+
+        Map<String, Integer> filetypesOnSite = DataLoader.getFileTypesFromSite(DataLoader.odderData);
+
+
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        for (Map.Entry<String, Integer> pair : filetypesOnSite.entrySet() ) {
+            pieChartData.add(new PieChart.Data(pair.getKey(), pair.getValue()));
+        }
+        final PieChart chart = new PieChart(pieChartData);
+        chart.setTitle("Fordeling af filtyper på sitet");
+
+        ((Group) scene2.getRoot()).getChildren().add(chart);
+        stage.setScene(scene2);
+        stage.show();
+         */
+
+
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+

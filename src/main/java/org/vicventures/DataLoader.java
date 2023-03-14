@@ -1,0 +1,254 @@
+package org.vicventures;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class DataLoader {
+    public static final String odderData = "src/main/resources/data/odder";
+    public static final String oddernettetData = "src/main/resources/data/oddernettet";
+
+    public static Map<String, Integer> countNumberOfSnapshotsPerYear(String website){
+        String[] datesFromDirectory = createDateArrayFromDirectoryNames(website);
+        List<String> filteredListOnlySnapshotDates = removeNonSnapshots(datesFromDirectory);
+        int[] allYears = getYears(filteredListOnlySnapshotDates);
+        Map<Integer, Integer> snapshotsPerYear = countSnapshotsPerYear(allYears);
+        Map<Integer, Integer> snapshotsPerYearSorted = sortHashMap(snapshotsPerYear);
+        Map<String, Integer> snapshotsPerYearString = convertMapKeysToStrings(snapshotsPerYearSorted);
+
+        return snapshotsPerYearString;
+    }
+    /**
+     * Create string array of files and directories in input directory
+     * @param directory to extract file- and directory names from
+     * @return an array of all file- and directory names in given input directory
+     */
+    private static String[] createDateArrayFromDirectoryNames(String directory){
+        File inputDirectoryPath = new File(directory);
+        return inputDirectoryPath.list();
+    }
+
+    /**
+     * Adds all strings from input array that has the form of an Internet Archive snapshot timestamp.
+     * @param dates an array of file/directory names, that contains some snapshot timestamps
+     * @return a list of timestamps
+     */
+    private static List<String> removeNonSnapshots(String[] dates){
+        List<String> listOfSnapshots = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d{14}");
+        for (String s:dates) {
+            Matcher matcher = pattern.matcher(s);
+            boolean matchFound = matcher.find();
+            if (matchFound){
+                listOfSnapshots.add(s);
+            }
+        }
+        return listOfSnapshots;
+    }
+
+    /**
+     * Extracts years from input timestamps
+     * @param listOfSnapshots containing strings of 14 digit timestamps of the format YYYYMMDDHHMMSS
+     * @return an array of years converted to integers
+     */
+    private static int[] getYears(List<String> listOfSnapshots){
+        String[] stringYears = new String[listOfSnapshots.size()];
+        for (int i = 0; i<listOfSnapshots.size(); i++) {
+            stringYears[i] = listOfSnapshots.get(i).substring(0,4);
+        }
+
+        int[] years = new int[stringYears.length];
+
+        for (int i = 0; i < stringYears.length; i++) {
+            years[i] = Integer.parseInt(stringYears[i]);
+        }
+        return years;
+    }
+
+    /**
+     * Calculate how many times a single year is present in the input array
+     * @param years contains multiple years as values
+     * @return a map containing every single year as keys and the value is a count of how many times the key was present in the ipnut array
+     */
+    private static Map<Integer, Integer> countSnapshotsPerYear(int[] years){
+        // Initialize map with years from 1998 until today
+        Map<Integer, Integer> snapshotsPerYear = new HashMap<>();
+        for (int year : years) {
+            if (snapshotsPerYear.containsKey(year)) {
+                int newCount = snapshotsPerYear.get(year) + 1;
+                snapshotsPerYear.put(year, newCount);
+            } else {
+                snapshotsPerYear.put(year, 1);
+            }
+        }
+        return snapshotsPerYear;
+    }
+
+    private static Map<Integer, Integer> sortHashMap(Map<Integer, Integer> inputMap){
+        Map<Integer, Integer> snapshotsPerYearSorted = new TreeMap<>(inputMap);
+        return snapshotsPerYearSorted;
+    }
+
+    private static Map<String, Integer> convertMapKeysToStrings(Map<Integer, Integer> inputMap){
+        Map<String, Integer> snapshotsPerYearString = new TreeMap<>();
+
+        for (Map.Entry<Integer,Integer> pair : inputMap.entrySet()) {
+            snapshotsPerYearString.put(pair.getKey().toString(),pair.getValue());
+        }
+        return snapshotsPerYearString;
+    }
+
+    /**
+     * Ectract all filetypes recursively from starting directory
+     * @param startDirectory where the search for filetypes starts from
+     * @return a map where keys are filetypes and values are number of occurrences in the file tree
+     */
+    public static Map<String, Integer> getFileTypesFromSite(String startDirectory){
+        List<String> fileStrings = DataLoader.getListOfAllFilesFromDirectory(DataLoader.odderData);
+        List<String> cleanFormats = DataLoader.getFileFormatFromPaths(fileStrings);
+        Map<String, Integer> countOfFormats = DataLoader.countFileTypes(cleanFormats);
+        return countOfFormats;
+    }
+    private static List<String> getListOfAllFilesFromDirectory(String startDirectory){
+        List<String> fileStrings = new ArrayList<>();
+        try (Stream<Path> stream = Files.walk(Paths.get(startDirectory))) {
+            List<Path> fileendings = stream.filter(Files::isRegularFile)
+                    .toList();
+            for (Path p: fileendings) {
+                fileStrings.add(String.valueOf(p));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fileStrings;
+    }
+
+    private static List<String> getFileFormatFromPaths(List<String> paths){
+        List<String> fileFormats = new ArrayList<>();
+        for (String path : paths) {
+            if (path.contains(".")){
+                int index = path.indexOf(".");
+                fileFormats.add(path.substring(index));
+            } else {
+                fileFormats.add(path);
+            }
+        }
+
+        List<String> fileFormatsNoQuery = new ArrayList<>();
+        for (String s: fileFormats) {
+            if (s.contains("?")){
+                int index = s.indexOf("?");
+                fileFormatsNoQuery.add(s.substring(0, index));
+            } else {
+                fileFormatsNoQuery.add(s);
+            }
+        }
+
+        List<String> fileFormatsNoAnd = new ArrayList<>();
+        for (String s : fileFormatsNoQuery){
+            if (s.contains("&")){
+                int index = s.indexOf("&");
+                fileFormatsNoAnd.add(s.substring(0, index));
+            } else {
+                fileFormatsNoAnd.add(s);
+            }
+        }
+
+        List<String> fileFormatsNoDoubleDot = new ArrayList<>();
+        for (String s : fileFormatsNoAnd){
+            if (s.contains(".")){
+                int index = s.lastIndexOf(".");
+                fileFormatsNoDoubleDot.add(s.substring(index));
+            } else {
+                fileFormatsNoDoubleDot.add(s);
+            }
+        }
+
+        List<String> fileFormatClean = new ArrayList<>();
+        for (String s : fileFormatsNoDoubleDot) {
+            if (!s.contains("DS_Store")){
+                fileFormatClean.add(s.toLowerCase());
+            }
+        }
+
+        List<String> fileFormatManualClean = new ArrayList<>();
+        for ( String s : fileFormatClean){
+            if (s.equalsIgnoreCase(".aspx/")){
+                fileFormatManualClean.add(".aspx");
+            } else if (s.equalsIgnoreCase(".doc")) {
+                fileFormatManualClean.add(".docx");
+            } else if (s.equalsIgnoreCase(".htm")) {
+                fileFormatManualClean.add(".html");
+            } else if (s.equalsIgnoreCase(".jpeg")) {
+                fileFormatManualClean.add(".jpg");
+            } else if (s.equalsIgnoreCase(".dk")) {
+            } else {
+                fileFormatManualClean.add(s);
+            }
+        }
+        return fileFormatManualClean;
+    }
+
+    private static Map<String, Integer> countFileTypes(List<String> allFileFormats){
+        // Initialize map with years from 1998 until today
+        Map<String, Integer> countOfFormats = new TreeMap<>();
+        for (String format : allFileFormats) {
+            if (countOfFormats.containsKey(format)) {
+                int newCount = countOfFormats.get(format) + 1;
+                countOfFormats.put(format, newCount);
+            } else {
+                countOfFormats.put(format, 1);
+            }
+        }
+        return countOfFormats;
+    }
+
+    public static Map<String, Map<String, Integer>> getFiletypesSortedByYear(String startDirectory){
+        List<String> filePaths = getListOfAllFilesFromDirectory(startDirectory);
+        List<String> shortenedPaths = new ArrayList<>();
+        Map<String, Map<String, Integer>> filetypesFilteredByYear = new HashMap<>();
+        Pattern pattern = Pattern.compile("\\/(\\d{4})\\d{10}\\/");
+
+        // Create new list where the first part of the absolute path has been removed.
+        for (String s : filePaths){
+            // WARN: This only works with odder directory as of now
+            shortenedPaths.add(s.replace("src/main/resources/data/odder", ""));
+        }
+
+        // Creates keys for outer map. These keys contain all years from timestamps.
+        for (String s : shortenedPaths) {
+            Matcher matcher = pattern.matcher(s);
+            boolean matchFound = matcher.find();
+
+            if (!matchFound){
+                System.out.println(s);
+            } else if (!filetypesFilteredByYear.containsKey(matcher.group(1))) {
+                filetypesFilteredByYear.put(matcher.group(1), new HashMap<String,Integer>(){
+                    {
+                    put("html", 0);
+                    // The method that is spoken about in comments below should be called from here.
+                        // It should return a Map<String,Integer> that can be used as value for this outer map
+                        // If filepath contains outer map Key, then add to inner map for that specific key
+                    }
+                });
+            }
+        }
+
+        // Here I should somehow add to inner map might be done with something like getFiletypesFromSite()
+        // and specifying startDir as all dirs containing the year from filetypesFilteredByYear outer key
+
+        // Testing
+        filetypesFilteredByYear.entrySet().forEach(System.out::println);
+        return null;
+    }
+
+
+
+}
