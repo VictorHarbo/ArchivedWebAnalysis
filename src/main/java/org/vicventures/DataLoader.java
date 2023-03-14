@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+//TODO: Add documentation for all methods
 public class DataLoader {
     public static final String odderData = "src/main/resources/data/odder";
     public static final String oddernettetData = "src/main/resources/data/oddernettet";

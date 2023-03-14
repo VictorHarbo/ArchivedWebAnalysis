@@ -24,6 +24,7 @@ import java.util.Map;
 public class DataVisualisation extends Application {
 
     @Override public void start(Stage stage) throws IOException {
+        //TODO: Divide different visualisations into own methods
         stage.setTitle("Fordeling af arkiverede websites");
         //defining the axes
         final CategoryAxis xAxis = new CategoryAxis();
@@ -108,6 +109,7 @@ public class DataVisualisation extends Application {
         File file2 = new File("src/main/resources/output/figure2.png");
         ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
         System.out.println("Image Saved");
+        // TODO: Create version of figure 2, that is made without HTML group.
     }
     public static void main(String[] args) {
         launch(args);
