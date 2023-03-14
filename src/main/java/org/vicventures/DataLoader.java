@@ -190,20 +190,6 @@ public class DataLoader {
         return fileFormatManualClean;
     }
 
-    private static Map<String, Integer> countFileTypes(List<String> allFileFormats){
-        // Initialize map with years from 1998 until today
-        Map<String, Integer> countOfFormats = new TreeMap<>();
-        for (String format : allFileFormats) {
-            if (countOfFormats.containsKey(format)) {
-                int newCount = countOfFormats.get(format) + 1;
-                countOfFormats.put(format, newCount);
-            } else {
-                countOfFormats.put(format, 1);
-            }
-        }
-        return countOfFormats;
-    }
-
     private static List<String> getFiletypesFromSpecificYear(String year, String startDirectory){
         List<String> fileStrings = new ArrayList<>();
         try (Stream<Path> stream = Files.walk(Paths.get(startDirectory))) {
@@ -230,6 +216,10 @@ public class DataLoader {
         return filteredPaths;
     }
 
+    /**
+     * TODO: Write doc
+     * @return
+     */
     public static Map<String, Map<String, Integer>> getAllFiletypesPerYear(){
         // Create list containing all formats
         List<String> fileStrings = getListOfAllFilesFromDirectory(oddernettetData);
@@ -266,7 +256,7 @@ public class DataLoader {
         return innerMap;
     }
 
-    public static List<String> getListOfAllYears(String website){
+    private static List<String> getListOfAllYears(String website){
         String[] datesFromDirectory = createDateArrayFromDirectoryNames(website);
         List<String> filteredListOnlySnapshotDates = removeNonSnapshots(datesFromDirectory);
         List<String> allYears = getDistinctStringYears(filteredListOnlySnapshotDates);
@@ -281,4 +271,6 @@ public class DataLoader {
         List<String> distinctYears = Arrays.stream(stringYears).distinct().toList();
         return distinctYears;
     }
+
+
 }
