@@ -272,5 +272,19 @@ public class DataLoader {
         return distinctYears;
     }
 
+    public static Map<String, Map<String, Integer>> getAllFiletypesPerYearMinusHtml(){
+        Map<String, Map<String, Integer>> allFiletypesPerYear = getAllFiletypesPerYear();
+        allFiletypesPerYear.entrySet()
+                .removeIf(entry -> entry.getKey().equals(".html"));
+
+        return allFiletypesPerYear;
+    }
+
+    public static Map<String, Map<String, Integer>> removeHtmlFilesFromMapOfMap(Map<String, Map<String, Integer>> allFiletypesPerYear){
+        allFiletypesPerYear.entrySet()
+                .removeIf(entry -> entry.getKey().equals(".html"));
+
+        return allFiletypesPerYear;
+    }
 
 }
