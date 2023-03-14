@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataLoader {
@@ -112,7 +111,7 @@ public class DataLoader {
      */
     public static Map<String, Integer> getFileTypesFromSite(String startDirectory){
         List<String> fileStrings = DataLoader.getListOfAllFilesFromDirectory(DataLoader.odderData);
-        List<String> cleanFormats = DataLoader.getFileFormatFromPaths(fileStrings);
+        List<String> cleanFormats = DataLoader.getCleanFileFormatFromPaths(fileStrings);
         Map<String, Integer> countOfFormats = DataLoader.countFileTypes(cleanFormats);
         return countOfFormats;
     }
@@ -130,7 +129,12 @@ public class DataLoader {
         return fileStrings;
     }
 
-    private static List<String> getFileFormatFromPaths(List<String> paths){
+    /**
+     * Return a list of all file formats present in the directories given as input
+     * @param paths to directories that are to be searched for filetypes
+     * @return a list of all file types present in input directories
+     */
+    private static List<String> getCleanFileFormatFromPaths(List<String> paths){
         List<String> fileFormats = new ArrayList<>();
         for (String path : paths) {
             if (path.contains(".")){
@@ -216,10 +220,11 @@ public class DataLoader {
         Map<String, Map<String, Integer>> filetypesFilteredByYear = new HashMap<>();
         Pattern pattern = Pattern.compile("\\/(\\d{4})\\d{10}\\/");
 
+
         // Create new list where the first part of the absolute path has been removed.
         for (String s : filePaths){
-            // WARN: This only works with odder directory as of now
-            shortenedPaths.add(s.replace("src/main/resources/data/odder", ""));
+            // WARN: This only works with oddernettet directory as of now
+            shortenedPaths.add(s.replace("src/main/resources/data/oddernettet", ""));
         }
 
         // Creates keys for outer map. These keys contain all years from timestamps.
@@ -230,25 +235,53 @@ public class DataLoader {
             if (!matchFound){
                 System.out.println(s);
             } else if (!filetypesFilteredByYear.containsKey(matcher.group(1))) {
-                filetypesFilteredByYear.put(matcher.group(1), new HashMap<String,Integer>(){
-                    {
-                    put("html", 0);
-                    // The method that is spoken about in comments below should be called from here.
-                        // It should return a Map<String,Integer> that can be used as value for this outer map
-                        // If filepath contains outer map Key, then add to inner map for that specific key
-                    }
-                });
+                String year = matcher.group(1);
+                filetypesFilteredByYear.put(year, createInnerMaps(year, startDirectory));
+
             }
         }
-
-        // Here I should somehow add to inner map might be done with something like getFiletypesFromSite()
-        // and specifying startDir as all dirs containing the year from filetypesFilteredByYear outer key
 
         // Testing
         filetypesFilteredByYear.entrySet().forEach(System.out::println);
         return null;
     }
 
+    public static Map<String, Integer> createInnerMaps(String year, String site){
+        // Reimplement this function to only add from files with specific year in timestamp
+        List<String> fileStrings = DataLoader.getFiletypesFromSpecificYear(year, site);
+        List<String> cleanFormats = DataLoader.getCleanFileFormatFromPaths(fileStrings);
+        Map<String, Integer> countOfFormats = DataLoader.countFileTypes(cleanFormats);
+        return countOfFormats;
+    }
+
+    private static List<String> getFiletypesFromSpecificYear(String year, String startDirectory){
+        List<String> fileStrings = new ArrayList<>();
+        try (Stream<Path> stream = Files.walk(Paths.get(startDirectory))) {
+            List<Path> fileendings = stream.filter(Files::isRegularFile)
+                    .toList();
+            for (Path p: fileendings) {
+                fileStrings.add(String.valueOf(p));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<String> shortenedPaths = new ArrayList<>();
+        for (String s : fileStrings){
+            // WARN: This only works with oddernettet directory as of now
+            shortenedPaths.add(s.replace("src/main/resources/data/oddernettet", ""));
+        }
+
+        List<String> filteredPaths = new ArrayList<>();
+        for (String s : shortenedPaths){
+            if (s.startsWith("/"+ year)){
+                filteredPaths.add(s);
+            }
+        }
+        return filteredPaths;
+    }
 
 
-}
+
+
+    }

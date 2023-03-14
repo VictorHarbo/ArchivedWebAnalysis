@@ -69,13 +69,14 @@ public class DataVisualisation extends Application {
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
         System.out.println("Image Saved");
 
+
+
         // Showing the scene on screen
         //stage.show();
 
         // ********* END OF LINECHART **********
         // ********* START OF PIECHART ********
 
-        /*
         Scene scene2 = new Scene(new Group());
         stage.setTitle("Imported Fruits");
         stage.setWidth(800);
@@ -93,8 +94,14 @@ public class DataVisualisation extends Application {
 
         ((Group) scene2.getRoot()).getChildren().add(chart);
         stage.setScene(scene2);
-        stage.show();
-         */
+        //stage.show();
+
+        //Saving the second scene as image
+        WritableImage image2 = scene2.snapshot(null);
+        File file2 = new File("src/main/resources/output/piechart.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
+        System.out.println("Image Saved");
+
 
 
     }

@@ -21,6 +21,6 @@ public class DataLoaderTest {
 
     @Test
     public void randomTest(){
-        DataLoader.getFiletypesSortedByYear(DataLoader.odderData);
+        DataLoader.getFiletypesSortedByYear(DataLoader.oddernettetData);
     }
 }
