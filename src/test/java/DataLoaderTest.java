@@ -1,5 +1,6 @@
 import org.junit.Test;
 import org.vicventures.DataLoader;
+import org.vicventures.DataToAndFromDisk;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class DataLoaderTest {
     @Test
     public void randomTest(){
         Map<String, Map<String, Integer>> result = DataLoader.getAllFiletypesPerYear();
-        System.out.println(result.entrySet());
+        DataToAndFromDisk.mapToDisk(result);
         //DataLoader.getListOfAllYears(DataLoader.oddernettetData);
     }
 
@@ -30,5 +31,12 @@ public class DataLoaderTest {
     public void testMapWithoutHtmlValues(){
         Map<String, Map<String, Integer>> result = DataLoader.getAllFiletypesPerYearMinusHtml();
         assertFalse(result.containsKey(".html"));
+    }
+
+    @Test
+    public void testLoadMap(){
+        Map<String, Map<String, Integer>> result = DataToAndFromDisk.mapFromDisk();
+
+        result.entrySet().forEach(System.out::println);
     }
 }

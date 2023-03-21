@@ -86,7 +86,7 @@ public class DataVisualisation extends Application {
 
         lineChart2.setTitle("Figur 2: Fordeling af filtyper over tid på www.oddernettet.dk");
 
-        Map<String, Map<String, Integer>> values = DataLoader.getAllFiletypesPerYear();
+        Map<String, Map<String, Integer>> values = DataToAndFromDisk.mapFromDisk();
         values.keySet().stream().forEach(filetype -> {
             XYChart.Series data = new XYChart.Series();
             data.setName(filetype);
@@ -111,11 +111,11 @@ public class DataVisualisation extends Application {
         final CategoryAxis xAxis3 = new CategoryAxis();
         final NumberAxis yAxis3 = new NumberAxis();
 
-        xAxis2.setLabel("År");
+        xAxis3.setLabel("År");
 
         //creating the chart
         final LineChart<String,Number> lineChart3 =
-                new LineChart<String,Number>(xAxis2,yAxis2);
+                new LineChart<String,Number>(xAxis3,yAxis3);
 
         lineChart3.setTitle("Figur 3: Fordeling af filtyper over tid på www.oddernettet.dk uden HTML-filer");
 
@@ -131,7 +131,7 @@ public class DataVisualisation extends Application {
             lineChart3.getData().add(data);
         });
 
-        Scene scene3  = new Scene(lineChart2,800,600);
+        Scene scene3  = new Scene(lineChart3,800,600);
         stage.setScene(scene3);
         //Saving the third scene as image
         WritableImage image3 = scene3.snapshot(null);
