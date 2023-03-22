@@ -1,31 +1,42 @@
 package org.vicventures;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import tech.tablesaw.api.Table;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 
 public class DataVisualisation extends Application {
+    Map<String, Map<String, Integer>> values = DataToAndFromDisk.mapFromDisk();
+    Map<String, Map<String, Integer>> valuesNoHtml = DataLoader.removeHtmlFilesFromMapOfMap(values);
+    Table frequenciesData = DataTransformer.convertToFrequencies(valuesNoHtml);
+
 
     @Override public void start(Stage stage) throws IOException {
         //TODO: Divide different visualisations into own methods
         stage.setTitle("Fordeling af arkiverede websites");
+
+        createFigure1(stage);
+
+        createFigure2(stage);
+
+        createFigure3(stage);
+
+    }
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    private void createFigure1(Stage stage) throws IOException {
         //defining the axes
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -73,6 +84,8 @@ public class DataVisualisation extends Application {
         // Showing the scene on screen
         //stage.show();
 
+    }
+    private void createFigure2(Stage stage) throws IOException {
         // Second visualisation
 
         final CategoryAxis xAxis2 = new CategoryAxis();
@@ -86,7 +99,7 @@ public class DataVisualisation extends Application {
 
         lineChart2.setTitle("Figur 2: Fordeling af filtyper over tid på www.oddernettet.dk");
 
-        Map<String, Map<String, Integer>> values = DataToAndFromDisk.mapFromDisk();
+        //Map<String, Map<String, Integer>> values = DataToAndFromDisk.mapFromDisk();
         values.keySet().stream().forEach(filetype -> {
             XYChart.Series data = new XYChart.Series();
             data.setName(filetype);
@@ -106,7 +119,8 @@ public class DataVisualisation extends Application {
         ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
         System.out.println("Image2 Saved");
 
-
+    }
+    private void createFigure3OLD(Stage stage) throws IOException {
         // Visualisation 3
         final CategoryAxis xAxis3 = new CategoryAxis();
         final NumberAxis yAxis3 = new NumberAxis();
@@ -139,10 +153,45 @@ public class DataVisualisation extends Application {
         ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
         System.out.println("Image3 Saved");
     }
-    public static void main(String[] args) {
-        launch(args);
-    }
 
+    private void createFigure3(Stage stage) throws IOException {
+        // Visualisation 3
+        final CategoryAxis xAxis3 = new CategoryAxis();
+        final NumberAxis yAxis3 = new NumberAxis();
+
+        xAxis3.setLabel("År");
+        yAxis3.setLabel("Procent");
+
+        //creating the chart
+        final AreaChart<String,Number> lineChart3 =
+                new AreaChart<String,Number>(xAxis3,yAxis3);
+
+        lineChart3.setTitle("Figur 3: Fordeling af filtyper over tid på www.oddernettet.dk uden HTML-filer. Målt i relativ frekvens.");
+
+        List<String> columnNames = frequenciesData.columnNames();
+        columnNames.remove(0);
+        columnNames.remove(0);
+
+        columnNames.stream().forEach(filetype -> {
+            XYChart.Series data = new XYChart.Series();
+            data.setName(filetype);
+            frequenciesData.stream().forEach(row -> {
+                if (row.getInt("total_files") != 0) {
+                    data.getData().add(new XYChart.Data(row.getString(0), row.getDouble(filetype)));
+                }
+            });
+
+            lineChart3.getData().add(data);
+        });
+
+        Scene scene3  = new Scene(lineChart3,800,600);
+        stage.setScene(scene3);
+        //Saving the third scene as image
+        WritableImage image3 = scene3.snapshot(null);
+        File file3 = new File("src/main/resources/output/figure3_frequencies.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
+        System.out.println("Image3 Saved");
+    }
 
 }
 

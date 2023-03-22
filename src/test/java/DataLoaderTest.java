@@ -1,8 +1,9 @@
 import org.junit.Test;
 import org.vicventures.DataLoader;
 import org.vicventures.DataToAndFromDisk;
+import org.vicventures.DataTransformer;
+import tech.tablesaw.api.Table;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
@@ -35,8 +36,13 @@ public class DataLoaderTest {
 
     @Test
     public void testLoadMap(){
-        Map<String, Map<String, Integer>> result = DataToAndFromDisk.mapFromDisk();
+        Map<String, Map<String, Integer>> originalMap = DataToAndFromDisk.mapFromDisk();
+        Map<String, Map<String, Integer>> noHtml = DataLoader.removeHtmlFilesFromMapOfMap(originalMap);
 
-        result.entrySet().forEach(System.out::println);
+        Table freq = DataTransformer.convertToFrequencies(noHtml);
+        //noHtml.entrySet().forEach(System.out::println);
+        //System.out.println(noHtml.get(".bmp"));
+        //System.out.println(originalMap.get(".bmp"));
+        System.out.println(freq.first(21));
     }
 }
