@@ -157,7 +157,8 @@ public class DataVisualisation extends Application {
     private void createFigure3(Stage stage) throws IOException {
         // Visualisation 3
         final CategoryAxis xAxis3 = new CategoryAxis();
-        final NumberAxis yAxis3 = new NumberAxis();
+        final NumberAxis yAxis3 = new NumberAxis(0,100,10);
+
 
         xAxis3.setLabel("År");
         yAxis3.setLabel("Procent");
