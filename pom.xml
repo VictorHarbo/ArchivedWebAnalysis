@@ -67,6 +67,11 @@
             <artifactId>javafx-swing</artifactId>
             <version>11</version>
         </dependency>
+        <dependency>
+            <groupId>tech.tablesaw</groupId>
+            <artifactId>tablesaw-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
 
 
 
