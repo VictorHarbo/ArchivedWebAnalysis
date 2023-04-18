@@ -47,6 +47,7 @@ public class HtmlTagCounter {
     }
 
     public static Map<Integer, Map<String, Long>> countTagsInFilesFromDir(String dir,String filetype) throws IOException {
+        // TODO: Need to implement a year filter. So that maps can be divided by years and outer map int changes to year
         List<String> files = DataLoader.getListOfFilesWithSpecificTypeFromDir(dir, filetype);
 
         Map<Integer, Map<String, Long>> allCounts = new HashMap<>();
