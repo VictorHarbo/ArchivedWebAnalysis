@@ -21,11 +21,10 @@ public class HtmlTagCounterTest {
     }
 
     @Test
-    public void jsoupPlayground() throws IOException {
+    public void tagsFromFileTest() throws IOException {
         List<String> htmlStrings = WarcLoader.listOfHtmlsFromWarcS("src/test/resources/IAH-20080430204825-00000-blackbook.warc");
         long h1Tags = HtmlTagCounter.findTags(htmlStrings.get(11), "h1");
 
-        System.out.println(h1Tags);
-        System.out.println(htmlStrings.get(11));
+        assertEquals(2, h1Tags);
     }
 }
