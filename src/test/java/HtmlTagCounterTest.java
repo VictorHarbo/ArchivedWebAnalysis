@@ -15,7 +15,7 @@ public class HtmlTagCounterTest {
                 "<h1>Big heading3</h1>" +
                 "<h1>Big heading4</h1>";
 
-        long result = HtmlTagCounter.findH1Tags(multipleH1String);
+        long result = HtmlTagCounter.findTags(multipleH1String, "h1");
 
         assertEquals( 4, result);
     }
@@ -23,7 +23,7 @@ public class HtmlTagCounterTest {
     @Test
     public void jsoupPlayground() throws IOException {
         List<String> htmlStrings = WarcLoader.listOfHtmlsFromWarcS("src/test/resources/IAH-20080430204825-00000-blackbook.warc");
-        long h1Tags = HtmlTagCounter.findH1Tags(htmlStrings.get(11));
+        long h1Tags = HtmlTagCounter.findTags(htmlStrings.get(11), "h1");
 
         System.out.println(h1Tags);
         System.out.println(htmlStrings.get(11));
