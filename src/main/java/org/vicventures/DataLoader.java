@@ -1,5 +1,8 @@
 package org.vicventures;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -118,6 +121,27 @@ public class DataLoader {
         }
         return fileStrings;
     }
+
+    public static List<String> getListOfFilesWithSpecificTypeFromDir(String startDirectory, String filetype){
+        List<String> allFilesInDir = getListOfAllFilesFromDirectory(startDirectory);
+        List<String> filesOfCorrectType = new ArrayList<>();
+
+        for (String file: allFilesInDir) {
+            if (file.endsWith(filetype)){
+                filesOfCorrectType.add(file);
+            }
+        }
+
+        return filesOfCorrectType;
+    }
+
+    public static Document loadHtmlFromPath(String path) throws IOException {
+        File input = new File(path);
+        Document doc = Jsoup.parse(input, "UTF-8");
+
+        return doc;
+    }
+
 
     /**
      * Return a list of all file formats present in the directories given as input

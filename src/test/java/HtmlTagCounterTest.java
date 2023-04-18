@@ -1,4 +1,5 @@
 import org.junit.Test;
+import org.vicventures.DataLoader;
 import org.vicventures.HtmlTagCounter;
 import org.vicventures.WarcLoader;
 
@@ -32,8 +33,16 @@ public class HtmlTagCounterTest {
     @Test
     public void allTagsTest() throws IOException{
         List<String> htmlStrings = WarcLoader.listOfHtmlsFromWarcS("src/test/resources/IAH-20080430204825-00000-blackbook.warc");
-        Map<String, Long> result = HtmlTagCounter.countAllTags(htmlStrings.get(11));
+        Map<String, Long> result = HtmlTagCounter.countAllTagsFromString(htmlStrings.get(11));
 
         assertEquals(26, result.size());
     }
+
+    @Test
+    public void allTagsFromFilesInDirTest() throws IOException {
+        HtmlTagCounter.countTagsInFilesFromDir(DataLoader.oddernettetData, ".html");
+    }
+
+
+
 }

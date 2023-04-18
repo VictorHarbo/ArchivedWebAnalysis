@@ -31,18 +31,33 @@ public class HtmlTagCounter {
         return tags.size();
     }
 
-    public static Map<String, Long> countAllTags(String htmlString) {
+    public static Map<String, Long> countAllTagsFromString(String htmlString) {
 
         Document document = Jsoup.parse(htmlString);
+        Map<String, Long> counts = countAllTagsInDoc(document);
+        return counts;
+    }
+
+    public static Map<String, Long> countAllTagsInDoc(Document doc){
         List<String> tags = new ArrayList<String>();
 
-        for(Element e : document.getAllElements()){
+        for(Element e : doc.getAllElements()){
             tags.add(e.tagName().toLowerCase());
         }
 
         Map<String, Long> counts = tags.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-
         return counts;
+    }
+
+    public static Map<String, Long> countTagsInFilesFromDir(String dir,String filetype) throws IOException {
+        List<String> files = DataLoader.getListOfFilesWithSpecificTypeFromDir(dir, filetype);
+
+        for (String file: files) {
+            Document doc = DataLoader.loadHtmlFromPath(file);
+            Map<String, Long> counts = countAllTagsInDoc(doc);
+            System.out.println(counts);
+        }
+        return null;
     }
 
 }
