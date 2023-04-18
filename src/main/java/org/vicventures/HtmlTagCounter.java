@@ -8,10 +8,7 @@ import org.jsoup.select.Elements;
 import org.jsoup.select.Evaluator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -49,15 +46,18 @@ public class HtmlTagCounter {
         return counts;
     }
 
-    public static Map<String, Long> countTagsInFilesFromDir(String dir,String filetype) throws IOException {
+    public static Map<Integer, Map<String, Long>> countTagsInFilesFromDir(String dir,String filetype) throws IOException {
         List<String> files = DataLoader.getListOfFilesWithSpecificTypeFromDir(dir, filetype);
 
+        Map<Integer, Map<String, Long>> allCounts = new HashMap<>();
+        int i = 0;
         for (String file: files) {
             Document doc = DataLoader.loadHtmlFromPath(file);
             Map<String, Long> counts = countAllTagsInDoc(doc);
             System.out.println(counts);
+            allCounts.put(i,counts);
         }
-        return null;
+        return allCounts;
     }
 
 }
