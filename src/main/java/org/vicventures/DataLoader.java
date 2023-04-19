@@ -13,11 +13,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-//TODO: Add documentation for all methods
 public class DataLoader {
     public static final String odderData = "src/main/resources/data/odder";
     public static final String oddernettetData = "src/main/resources/data/oddernettet";
 
+    /**
+     * Count the number of snapshots per year for a given website.
+     * @param website to count snapshots for.
+     * @return a map containing years and occurrences of snapshots for the given year.
+     */
     public static Map<String, Integer> countNumberOfSnapshotsPerYear(String website){
         String[] datesFromDirectory = createDateArrayFromDirectoryNames(website);
         List<String> filteredListOnlySnapshotDates = removeNonSnapshots(datesFromDirectory);
@@ -28,6 +32,7 @@ public class DataLoader {
 
         return snapshotsPerYearString;
     }
+
     /**
      * Create string array of files and directories in input directory
      * @param directory to extract file- and directory names from
@@ -94,11 +99,21 @@ public class DataLoader {
         return snapshotsPerYear;
     }
 
+    /**
+     * Sort a map.
+     * @param inputMap to sort.
+     * @return the sorted map.
+     */
     private static Map<Integer, Integer> sortHashMap(Map<Integer, Integer> inputMap){
         Map<Integer, Integer> snapshotsPerYearSorted = new TreeMap<>(inputMap);
         return snapshotsPerYearSorted;
     }
 
+    /**
+     * Convert integer keys that represent years to strings.
+     * @param inputMap to convert keys in.
+     * @return string value of integer year.
+     */
     private static Map<String, Integer> convertMapKeysToStrings(Map<Integer, Integer> inputMap){
         Map<String, Integer> snapshotsPerYearString = new TreeMap<>();
 
@@ -108,6 +123,11 @@ public class DataLoader {
         return snapshotsPerYearString;
     }
 
+    /**
+     * Get a list of file paths to files in a given directory.
+     * @param startDirectory to find files in.
+     * @return a list of file paths in a given directory.
+     */
     private static List<String> getListOfAllFilesFromDirectory(String startDirectory){
         List<String> fileStrings = new ArrayList<>();
         try (Stream<Path> stream = Files.walk(Paths.get(startDirectory))) {
@@ -122,6 +142,12 @@ public class DataLoader {
         return fileStrings;
     }
 
+    /**
+     * Get a list of all files with same file ending from a directory.
+     * @param startDirectory to search for files in.
+     * @param filetype to add to list.
+     * @return a list of file paths to all files of same type within a given directory.
+     */
     public static List<String> getListOfFilesWithSpecificTypeFromDir(String startDirectory, String filetype){
         List<String> allFilesInDir = getListOfAllFilesFromDirectory(startDirectory);
         List<String> filesOfCorrectType = new ArrayList<>();
@@ -135,6 +161,11 @@ public class DataLoader {
         return filesOfCorrectType;
     }
 
+    /**
+     * Load HTML document from path.
+     * @param path to HTML document.
+     * @return jsoup document representation of HTML file.
+     */
     public static Document loadHtmlFromPath(String path) throws IOException {
         File input = new File(path);
         Document doc = Jsoup.parse(input, "UTF-8");
@@ -214,6 +245,12 @@ public class DataLoader {
         return fileFormatManualClean;
     }
 
+    /**
+     * Search for file types from a specific year in a given directory.
+     * @param year to search for.
+     * @param startDirectory to start the search in.
+     * @return a list of files from specific year.
+     */
     private static List<String> getFiletypesFromSpecificYear(String year, String startDirectory){
         List<String> fileStrings = new ArrayList<>();
         try (Stream<Path> stream = Files.walk(Paths.get(startDirectory))) {
@@ -241,8 +278,8 @@ public class DataLoader {
     }
 
     /**
-     * TODO: Write doc
-     * @return
+     * Get all file types per year for the archived website www.oddernettet.dk.
+     * @return a nested map where outer key represents year and inner map contains filetype and occurrences.
      */
     public static Map<String, Map<String, Integer>> getAllFiletypesPerYear(){
         // Create list containing all formats
@@ -257,6 +294,7 @@ public class DataLoader {
         }
         return filetypesPerYearCount;
     }
+
 
     private static Map<String, Integer> createInnerMaps(List<String> allYears, List<String> allDistinctFormats, int i){
         Map<String, Integer> innerMap = new TreeMap<>();
@@ -296,6 +334,9 @@ public class DataLoader {
         return distinctYears;
     }
 
+    /**
+     * Exclude HTML files from list of file types from www.oddernettet.dk
+     */
     public static Map<String, Map<String, Integer>> getAllFiletypesPerYearMinusHtml(){
         Map<String, Map<String, Integer>> allFiletypesPerYear = getAllFiletypesPerYear();
         allFiletypesPerYear.entrySet()
@@ -304,6 +345,11 @@ public class DataLoader {
         return allFiletypesPerYear;
     }
 
+    /**
+     * Remove HTML files from nested map of filetypes from directory.
+     * @param allFiletypesPerYear map to remove HTML files from.
+     * @return nested map without HTML files.
+     */
     public static Map<String, Map<String, Integer>> removeHtmlFilesFromMapOfMap(Map<String, Map<String, Integer>> allFiletypesPerYear){
         allFiletypesPerYear.entrySet()
                 .removeIf(entry -> entry.getKey().equals(".html"));

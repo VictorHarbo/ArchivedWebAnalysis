@@ -21,6 +21,9 @@ public class DataVisualisation extends Application {
     Table frequenciesData = DataTransformer.convertToFrequencies(valuesNoHtml);
 
 
+    /**
+     * Create figures that visualise the data analysed in other classes of this project.
+     */
     @Override public void start(Stage stage) throws IOException {
         //TODO: Divide different visualisations into own methods
         stage.setTitle("Fordeling af arkiverede websites");
@@ -36,6 +39,9 @@ public class DataVisualisation extends Application {
         launch(args);
     }
 
+    /**
+     * Create figure that visualises how archived versions are dispersed per year.
+     */
     private void createFigure1(Stage stage) throws IOException {
         //defining the axes
         final CategoryAxis xAxis = new CategoryAxis();
@@ -85,6 +91,11 @@ public class DataVisualisation extends Application {
         //stage.show();
 
     }
+
+    /**
+     * Create figure that visualise how different filetypes have been used over time
+     * on the website www.oddernettet.dk.
+     */
     private void createFigure2(Stage stage) throws IOException {
         // Second visualisation
 
@@ -120,40 +131,11 @@ public class DataVisualisation extends Application {
         System.out.println("Image2 Saved");
 
     }
-    private void createFigure3OLD(Stage stage) throws IOException {
-        // Visualisation 3
-        final CategoryAxis xAxis3 = new CategoryAxis();
-        final NumberAxis yAxis3 = new NumberAxis();
 
-        xAxis3.setLabel("År");
-
-        //creating the chart
-        final LineChart<String,Number> lineChart3 =
-                new LineChart<String,Number>(xAxis3,yAxis3);
-
-        lineChart3.setTitle("Figur 3: Fordeling af filtyper over tid på www.oddernettet.dk uden HTML-filer");
-
-        Map<String, Map<String, Integer>> values2 = DataLoader.removeHtmlFilesFromMapOfMap(values);
-        values2.keySet().stream().forEach(filetype -> {
-            XYChart.Series data = new XYChart.Series();
-            data.setName(filetype);
-            values2.get(filetype).entrySet().stream().forEach(pair -> {
-                data.getData().add(new XYChart.Data(pair.getKey(), pair.getValue()));
-            });
-
-            // and add the data set to the chart
-            lineChart3.getData().add(data);
-        });
-
-        Scene scene3  = new Scene(lineChart3,800,600);
-        stage.setScene(scene3);
-        //Saving the third scene as image
-        WritableImage image3 = scene3.snapshot(null);
-        File file3 = new File("src/main/resources/output/figure3.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
-        System.out.println("Image3 Saved");
-    }
-
+    /**
+     * Create figure that visualise how different filetypes are dispersed over time.
+     * Measured in relative frequencies and without HTML files.
+     */
     private void createFigure3(Stage stage) throws IOException {
         // Visualisation 3
         final CategoryAxis xAxis3 = new CategoryAxis();

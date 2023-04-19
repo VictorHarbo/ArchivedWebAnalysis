@@ -6,6 +6,10 @@ import java.util.Map;
 
 public class DataToAndFromDisk {
 
+    /**
+     * Save map to disk.
+     * @param output nested map to save to disk.
+     */
     public static void mapToDisk(Map<String, Map<String, Integer>> output){
         try {
             FileOutputStream fileOut =
@@ -20,6 +24,10 @@ public class DataToAndFromDisk {
         }
     }
 
+    /**
+     * Load map from disk.
+     * @return nested map, loaded from disk.
+     */
     public static Map<String, Map<String, Integer>> mapFromDisk(){
         Map<String, Map<String, Integer>> loadedMap = null;
         try {

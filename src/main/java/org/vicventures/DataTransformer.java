@@ -9,6 +9,11 @@ import java.util.Map;
 
 public class DataTransformer {
 
+    /**
+     * Convert a nested map to a tablesaw table.
+     * @param originalMap to convert.
+     * @return tablesaw table of input map.
+     */
     public static Table convertToFrequencies(Map<String, Map<String, Integer>> originalMap){
 
         // Get filetypes from original map of data
@@ -44,8 +49,6 @@ public class DataTransformer {
         for (IntColumn column: filetypeColumns) {
             ofFiletypes.addColumns(column);
         }
-
-
 
         // Counting integers in row and adding sum to column total_files
         for (Row row : ofFiletypes){

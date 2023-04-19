@@ -28,6 +28,11 @@ public class HtmlTagCounter {
         return tags.size();
     }
 
+    /**
+     * Count all tags in an HTML string.
+     * @param htmlString to count tags in.
+     * @return a map containing all tags used and their occurrence.
+     */
     public static Map<String, Long> countAllTagsFromString(String htmlString) {
 
         Document document = Jsoup.parse(htmlString);
@@ -35,6 +40,11 @@ public class HtmlTagCounter {
         return counts;
     }
 
+    /**
+     * Count all tags in input HTML document.
+     * @param doc to count tags in.
+     * @return a map containing all tags used and their occurrence.
+     */
     public static Map<String, Long> countAllTagsInDoc(Document doc){
         List<String> tags = new ArrayList<String>();
 
@@ -46,6 +56,12 @@ public class HtmlTagCounter {
         return counts;
     }
 
+    /**
+     * Count all tags in all HTML files in a given directory.
+     * @param dir to find HTML files in.
+     * @param filetype to find tags in. Preferably HTML files.
+     * @return a nested map containing maps for each file with tags and occurrences.
+     */
     public static Map<Integer, Map<String, Long>> countTagsInFilesFromDir(String dir,String filetype) throws IOException {
         // TODO: Need to implement a year filter. So that maps can be divided by years and outer map int changes to year
         List<String> files = DataLoader.getListOfFilesWithSpecificTypeFromDir(dir, filetype);
