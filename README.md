@@ -22,6 +22,3 @@ These classes contain methods that loads, transforms and analyses specific parts
 The analysis and counting of different filetypes present in the dataset also happens in these classes.
 
 The class ```DataToAndFromDisk``` reads and writes files to and from the disk and is used to make different steps of the analysis more efficient, by saving some results and then reading them instead of calculating it all again.
-
-TODO: 
-Describe HtmlTagCounter and Main (Main should probably be deleted).
