@@ -186,7 +186,7 @@ public class DataVisualisation extends Application {
         stage.setScene(scene3);
         //Saving the third scene as image
         WritableImage image3 = scene3.snapshot(null);
-        File file3 = new File("src/main/resources/output/figure3_frequencies_new_test.png");
+        File file3 = new File("src/main/resources/output/figure3_frequencies.png");
         ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
         System.out.println("Image3 Saved");
 
