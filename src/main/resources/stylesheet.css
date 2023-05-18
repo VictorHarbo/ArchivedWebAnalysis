@@ -109,4 +109,8 @@
 }
 #figur3 .chart-series-area-fill.series9 {
     -fx-fill: -fx-series9-alpha;
-} 
+}
+
+.bar-chart .chart-content .chart-plot-background {
+    -fx-background-color: transparent;
+}
