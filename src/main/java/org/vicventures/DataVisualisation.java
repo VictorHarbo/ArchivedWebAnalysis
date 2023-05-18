@@ -150,6 +150,7 @@ public class DataVisualisation extends Application {
                 new AreaChart<String,Number>(xAxis3,yAxis3);
 
         lineChart3.setTitle("Figur 3: Fordeling af filtyper over tid på www.oddernettet.dk uden HTML-filer. Målt i relativ frekvens.");
+        lineChart3.setId("figur3");
 
         List<String> columnNames = frequenciesData.columnNames();
         columnNames.remove(0);
@@ -165,16 +166,34 @@ public class DataVisualisation extends Application {
             });
 
             lineChart3.getData().add(data);
+
+            /*
+            Node fill = data.getNode().lookup(".chart-series-area-fill"); // only for AreaChart
+            Node line = data.getNode().lookup(".chart-series-area-line");
+            Color color = Color.RED; // or any other color
+            String rgb = String.format("%d, %d, %d",
+                    (int) (color.getRed() * 255),
+                    (int) (color.getGreen() * 255),
+                    (int) (color.getBlue() * 255));
+            fill.setStyle("-fx-fill: rgba(" + rgb + ", 0.15);");
+            line.setStyle("-fx-stroke: rgba(" + rgb + ", 1.0);");
+             */
+
         });
 
         Scene scene3  = new Scene(lineChart3,800,600);
+        scene3.getStylesheets().add("stylesheet.css");
         stage.setScene(scene3);
         //Saving the third scene as image
         WritableImage image3 = scene3.snapshot(null);
-        File file3 = new File("src/main/resources/output/figure3_frequencies.png");
+        File file3 = new File("src/main/resources/output/figure3_frequencies_new_test.png");
         ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
         System.out.println("Image3 Saved");
+
+        // Showing the scene on screen
+        // stage.show();
     }
+
 
 }
 

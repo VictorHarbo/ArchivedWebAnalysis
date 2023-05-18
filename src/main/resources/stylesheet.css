@@ -1,0 +1,112 @@
+#figur3 {
+    -fx-series0-color: #006400;
+    -fx-series0-alpha: #00640026;
+    -fx-series1-color: #00008b;
+    -fx-series1-alpha: #00008b26;
+    -fx-series2-color: #b03060;
+    -fx-series2-alpha: #b0306026;
+    -fx-series3-color: #ff4500;
+    -fx-series3-alpha: #ff450026;
+    -fx-series4-color: #00ff3381;
+    -fx-series4-alpha: #00ff3326;
+    -fx-series5-color: #ffd700;
+    -fx-series5-alpha: #ffd70026;
+    -fx-series6-color: #00ffff;
+    -fx-series6-alpha: #00ffff26;
+    -fx-series7-color: #ff00ff;
+    -fx-series7-alpha: #ff00ff26;
+    -fx-series8-color: #6495ed;
+    -fx-series8-alpha: #6495ed26;
+    -fx-series9-color: #baa52f;
+    -fx-series9-alpha: #baa52f26;
+}
+
+#figur3 .chart-series-area-line.series0,
+#figur3 .chart-area-symbol.series0 {
+    -fx-stroke: -fx-series0-color;
+    -fx-background-color: -fx-series0-color;
+}
+#figur3 .chart-series-area-fill.series0 {
+    -fx-fill: -fx-series0-alpha;
+}  
+
+#figur3 .chart-series-area-line.series1,
+#figur3 .chart-area-symbol.series1 {
+    -fx-stroke: -fx-series1-color;
+    -fx-background-color: -fx-series1-color;
+}
+#figur3 .chart-series-area-fill.series1 {
+    -fx-fill: -fx-series1-alpha;
+}  
+
+#figur3 .chart-series-area-line.series2,
+#figur3 .chart-area-symbol.series2 {
+    -fx-stroke: -fx-series2-color;
+    -fx-background-color: -fx-series2-color;
+}
+#figur3 .chart-series-area-fill.series2 {
+    -fx-fill: -fx-series2-alpha;
+} 
+
+#figur3 .chart-series-area-line.series3,
+#figur3 .chart-area-symbol.series3 {
+    -fx-stroke: -fx-series3-color;
+    -fx-background-color: -fx-series3-color;
+}
+#figur3 .chart-series-area-fill.series3 {
+    -fx-fill: -fx-series3-alpha;
+} 
+
+#figur3 .chart-series-area-line.series4,
+#figur3 .chart-area-symbol.series4 {
+    -fx-stroke: -fx-series4-color;
+    -fx-background-color: -fx-series4-color;
+}
+#figur3 .chart-series-area-fill.series4 {
+    -fx-fill: -fx-series4-alpha;
+} 
+
+#figur3 .chart-series-area-line.series5,
+#figur3 .chart-area-symbol.series5 {
+    -fx-stroke: -fx-series5-color;
+    -fx-background-color: -fx-series5-color;
+}
+#figur3 .chart-series-area-fill.series5 {
+    -fx-fill: -fx-series5-alpha;
+} 
+
+#figur3 .chart-series-area-line.series6,
+#figur3 .chart-area-symbol.series6 {
+    -fx-stroke: -fx-series6-color;
+    -fx-background-color: -fx-series6-color;
+}
+#figur3 .chart-series-area-fill.series6 {
+    -fx-fill: -fx-series6-alpha;
+} 
+
+#figur3 .chart-series-area-line.series7,
+#figur3 .chart-area-symbol.series7 {
+    -fx-stroke: -fx-series7-color;
+    -fx-background-color: -fx-series7-color;
+}
+#figur3 .chart-series-area-fill.series7 {
+    -fx-fill: -fx-series7-alpha;
+} 
+
+#figur3 .chart-series-area-line.series8,
+#figur3 .chart-area-symbol.series8 {
+    -fx-stroke: -fx-series8-color;
+    -fx-background-color: -fx-series8-color;
+}
+#figur3 .chart-series-area-fill.series8 {
+    -fx-fill: -fx-series8-alpha;
+} 
+
+#figur3 .chart-series-area-line.series9,
+#figur3 .chart-area-symbol.series9 {
+    -fx-stroke: -fx-series9-color;
+    -fx-background-color: -fx-series9-color;
+}
+#figur3 .chart-series-area-fill.series9 {
+    -fx-fill: -fx-series9-alpha;
+} 
