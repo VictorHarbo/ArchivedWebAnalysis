@@ -17,7 +17,7 @@ public class DataLoaderTest {
     public void snapshotsPerYearTest(){
        Map<String, Integer> snapshotsPerYear = DataLoader.countNumberOfSnapshotsPerYear(DataLoader.odderData);
 
-       System.out.println(snapshotsPerYear.entrySet());
+       //System.out.println(snapshotsPerYear.entrySet());
     }
 
     // TODO: rename and make actual test
@@ -43,6 +43,6 @@ public class DataLoaderTest {
         //noHtml.entrySet().forEach(System.out::println);
         //System.out.println(noHtml.get(".bmp"));
         //System.out.println(originalMap.get(".bmp"));
-        System.out.println(freq.first(21));
+        //System.out.println(freq.first(21));
     }
 }
