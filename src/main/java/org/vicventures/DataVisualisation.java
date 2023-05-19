@@ -48,6 +48,7 @@ public class DataVisualisation extends Application {
         final NumberAxis yAxis = new NumberAxis();
 
         xAxis.setLabel("År");
+        yAxis.setLabel("Antal");
 
         //creating the chart
         final LineChart<String,Number> lineChart =
@@ -98,6 +99,7 @@ public class DataVisualisation extends Application {
         final NumberAxis yAxis2 = new NumberAxis();
 
         xAxis2.setLabel("År");
+        yAxis2.setLabel("Antal");
 
         //creating the chart
         final LineChart<String,Number> lineChart2 =
