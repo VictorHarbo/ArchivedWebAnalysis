@@ -75,21 +75,17 @@ public class DataVisualisation extends Application {
             oddernettetSeries.getData().add(new XYChart.Data(pair.getKey(), pair.getValue()));
         }
 
-        // TODO: Make linegraph not show empty nodes from odder.dk
         Scene scene  = new Scene(lineChart,800,600);
         lineChart.getData().addAll(oddernettetSeries, odderSeries);
 
+        scene.getStylesheets().add("stylesheet.css");
         stage.setScene(scene);
 
         //Saving the scene as image
         WritableImage image = scene.snapshot(null);
-        File file = new File("src/main/resources/output/fordelingAfSnapshots.png");
+        File file = new File("src/main/resources/output/figure1_fordelingAfSnapshots.png");
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
         System.out.println("Image1 Saved");
-
-        // Showing the scene on screen
-        //stage.show();
-
     }
 
     /**
@@ -98,7 +94,6 @@ public class DataVisualisation extends Application {
      */
     private void createFigure2(Stage stage) throws IOException {
         // Second visualisation
-
         final CategoryAxis xAxis2 = new CategoryAxis();
         final NumberAxis yAxis2 = new NumberAxis();
 
@@ -122,14 +117,14 @@ public class DataVisualisation extends Application {
             lineChart2.getData().add(data);
         });
 
-        Scene scene2  = new Scene(lineChart2,800,600);
-        stage.setScene(scene2);
+        Scene scene  = new Scene(lineChart2,800,600);
+        scene.getStylesheets().add("stylesheet.css");
+        stage.setScene(scene);
         //Saving the third scene as image
-        WritableImage image2 = scene2.snapshot(null);
-        File file2 = new File("src/main/resources/output/figure2.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(image2, null), "PNG", file2);
+        WritableImage image = scene.snapshot(null);
+        File file = new File("src/main/resources/output/figure2_fordelingAfFiltyper.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
         System.out.println("Image2 Saved");
-
     }
 
     /**
@@ -140,7 +135,6 @@ public class DataVisualisation extends Application {
         // Visualisation 3
         final CategoryAxis xAxis3 = new CategoryAxis();
         final NumberAxis yAxis3 = new NumberAxis(0,100,10);
-
 
         xAxis3.setLabel("År");
         yAxis3.setLabel("Procent");
@@ -166,32 +160,16 @@ public class DataVisualisation extends Application {
             });
 
             lineChart3.getData().add(data);
-
-            /*
-            Node fill = data.getNode().lookup(".chart-series-area-fill"); // only for AreaChart
-            Node line = data.getNode().lookup(".chart-series-area-line");
-            Color color = Color.RED; // or any other color
-            String rgb = String.format("%d, %d, %d",
-                    (int) (color.getRed() * 255),
-                    (int) (color.getGreen() * 255),
-                    (int) (color.getBlue() * 255));
-            fill.setStyle("-fx-fill: rgba(" + rgb + ", 0.15);");
-            line.setStyle("-fx-stroke: rgba(" + rgb + ", 1.0);");
-             */
-
         });
 
-        Scene scene3  = new Scene(lineChart3,800,600);
-        scene3.getStylesheets().add("stylesheet.css");
-        stage.setScene(scene3);
+        Scene scene  = new Scene(lineChart3,800,600);
+        scene.getStylesheets().add("stylesheet.css");
+        stage.setScene(scene);
         //Saving the third scene as image
-        WritableImage image3 = scene3.snapshot(null);
-        File file3 = new File("src/main/resources/output/figure3_frequencies.png");
-        ImageIO.write(SwingFXUtils.fromFXImage(image3, null), "PNG", file3);
+        WritableImage image = scene.snapshot(null);
+        File file = new File("src/main/resources/output/figure3_frequencies.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(image, null), "PNG", file);
         System.out.println("Image3 Saved");
-
-        // Showing the scene on screen
-        // stage.show();
     }
 
 
