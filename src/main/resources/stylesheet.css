@@ -1,3 +1,4 @@
+/* Defines colors for figure 3 */
 #figur3 {
     -fx-series0-color: #006400;
     -fx-series0-alpha: #00640026;
@@ -109,8 +110,4 @@
 }
 #figur3 .chart-series-area-fill.series9 {
     -fx-fill: -fx-series9-alpha;
-}
-
-.bar-chart .chart-content .chart-plot-background {
-    -fx-background-color: transparent;
 }
